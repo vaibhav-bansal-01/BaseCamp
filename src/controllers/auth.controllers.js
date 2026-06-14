@@ -8,6 +8,7 @@ import {
   sendEmail,
 } from "../utils/mail.js";
 import jwt from "jsonwebtoken";
+import crypto from "crypto"
 
 const generateJWT = async (userId) => {
   try {
@@ -169,8 +170,8 @@ const verifyEmail = asyncHandler(async (req, res) => {
     .update(verificationToken)
     .digest("hex");
 
-  await user.findOne({
-    emailVerificationToken: verificationToken,
+  const user = await User.findOne({
+    emailVerificationToken: hashedToken,
     emailVerificationExpiry: {
       $gt: Date.now(),
     },
@@ -237,7 +238,7 @@ const resendEmailVerification = asyncHandler(async (req, res) => {
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
-  const incomingRefreshToken = req.cookie.refreshToken || req.body.refreshToken;
+  const incomingRefreshToken = req.cookies?.refreshToken || req.body.refreshToken;
 
   if (!incomingRefreshToken) {
     throw new ApiError(401, "Unauthorized access");
@@ -269,12 +270,12 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     );
 
     user.refreshToken = newRefreshToken;
-    await user.save();
+    await user.save({validateBeforeSave: false});
 
     return res
       .status(200)
       .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", refreshToken, options)
+      .cookie("refreshToken", newRefreshToken, options)
       .json(
         new ApiResponse(
           200,
@@ -359,13 +360,13 @@ const resetForgotPassword = asyncHandler(async (req, res) => {
 const changePassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
 
-  const user = User.findOne(req.user._id);
+  const user = await User.findOne(req.user._id);
 
   if (!user) {
     throw new ApiError(404, "User not found");
   }
 
-  const isPasswordValid = isPasswordCorrect(oldPassword);
+  const isPasswordValid = await user.isPasswordCorrect(oldPassword);
 
   if (!isPasswordValid) {
     throw new ApiError(400, "Invalid old password");
@@ -373,7 +374,7 @@ const changePassword = asyncHandler(async (req, res) => {
 
   user.password = newPassword;
 
-  await user.save({ validateBeforeSave: false });
+  await user.save();
 
   return res
     .status(200)

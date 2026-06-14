@@ -43,7 +43,7 @@ router
 //secured
 router.route("/logout").post(verifyJWT, logoutUser);
 
-router.route("/current-user").post(verifyJWT, getcurrentUser);
+router.route("/current-user").get(verifyJWT, getcurrentUser);
 
 router
   .route("/change-password")
@@ -55,7 +55,7 @@ router
   );
 
 router
-  .route("/resene-email-verification")
+  .route("/resened-email-verification")
   .post(verifyJWT, resendEmailVerification);
 
 export default router;
