@@ -21,7 +21,7 @@ const generateJWT = async (userId) => {
 const registerUser = asyncHandler(async (req, res) => {
   const { email, username, password, role } = req.body;
 
-  const existedUser = User.findOne({
+  const existedUser = await User.findOne({
     $or: [{ username }, { email }],
   });
 
@@ -58,7 +58,7 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   const createdUser = await User.findById(user._id).select(
-    -password - refreshToken - emailVerificationToken - emailVerificationExpiry,
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"
   );
 
   if (!createdUser) {
