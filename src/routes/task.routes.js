@@ -30,6 +30,7 @@ router
 
 router
     .route("/:projectId/t/:taskId")
+    .get(validateProjectPermission(AvailableRoles), getTasks)
     .put(validateProjectPermission([UserRolesEnum.ADMIN, UserRolesEnum.PROJECT_ADMIN]), createTaskValidator(), updateTask)
     .delete(validateProjectPermission([UserRolesEnum.ADMIN, UserRolesEnum.PROJECT_ADMIN]), deleteTask)
 

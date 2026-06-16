@@ -86,29 +86,27 @@ const addMemberToProjectValidator = () => {
       .notEmpty()
       .withMessage("Role is required")
       .isIn(AvailableRoles)
-      .withMessage("Role is invalid")
-  ]
-}
+      .withMessage("Role is invalid"),
+  ];
+};
 
 const createTaskValidator = () => {
   return [
-    body("title")
-      .trim()
-      .notEmpty()
-      .withMessage("Title is required"),
+    body("title").trim().notEmpty().withMessage("Title is required"),
     body("description").optional(),
-  ]
-}
+  ];
+};
 
 const createSubtaskValidator = () => {
   return [
-    body("title")
-      .trim()
-      .notEmpty()
-      .withMessage("Title is required"),
+    body("title").trim().notEmpty().withMessage("Title is required"),
     body("description").optional(),
-  ]
-}
+  ];
+};
+
+const createNoteValidator = () => {
+  return [body("content").trim().notEmpty().withMessage("Content is required")];
+};
 
 export {
   userRegisterValidator,
@@ -119,5 +117,6 @@ export {
   addMemberToProjectValidator,
   createProjectValidator,
   createTaskValidator,
-  createSubtaskValidator
+  createSubtaskValidator,
+  createNoteValidator,
 };
