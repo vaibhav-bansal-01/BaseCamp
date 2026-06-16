@@ -90,6 +90,26 @@ const addMemberToProjectValidator = () => {
   ]
 }
 
+const createTaskValidator = () => {
+  return [
+    body("title")
+      .trim()
+      .notEmpty()
+      .withMessage("Title is required"),
+    body("description").optional(),
+  ]
+}
+
+const createSubtaskValidator = () => {
+  return [
+    body("title")
+      .trim()
+      .notEmpty()
+      .withMessage("Title is required"),
+    body("description").optional(),
+  ]
+}
+
 export {
   userRegisterValidator,
   userLoginValidator,
@@ -97,5 +117,7 @@ export {
   userForgotPasswordvalidator,
   userResetForgotPasswordValidator,
   addMemberToProjectValidator,
-  createProjectValidator
+  createProjectValidator,
+  createTaskValidator,
+  createSubtaskValidator
 };
