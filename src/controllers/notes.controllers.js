@@ -1,5 +1,6 @@
 import { User } from "../models/user.models.js";
 import { Project } from "../models/project.models.js";
+import { Note } from "../models/note.models.js";
 import { ApiResponse } from "../utils/api-response.js";
 import { ApiError } from "../utils/api-error.js";
 import { asyncHandler } from "../utils/async-handler.js";
@@ -14,7 +15,7 @@ const getNotes = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Project not found");
   }
 
-  const notes = await Task.find({
+  const notes = await Note.find({
     project: new mongoose.Types.ObjectId(projectId),
   });
 
@@ -74,7 +75,7 @@ const getNotesById = asyncHandler(async (req, res) => {
     {
       $addFields: {
         createdBy: {
-          $arrayElementAt: ["assignedTo", 0],
+          $arrayElemAt: ["$assignedTo", 0],
         },
       },
     },
@@ -120,7 +121,7 @@ const deleteNotes = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, note, "Note deleted successfully"));
+    .json(new ApiResponse(200, {}, "Note deleted successfully"));
 });
 
 export { getNotes, getNotesById, createNotes, deleteNotes, updateNotes };

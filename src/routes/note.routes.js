@@ -19,7 +19,7 @@ router.use(verifyJWT);
 
 router
   .route("/:projectId")
-  .get(validateProjectPermission(AvailableRoles), getNotesById)
+  .get(validateProjectPermission(AvailableRoles), getNotes)
   .post(
     validateProjectPermission([UserRolesEnum.ADMIN]),
     createNoteValidator(),
@@ -28,7 +28,7 @@ router
 
 router
   .route("/:projectId/n/:noteId")
-  .get(validateProjectPermission(AvailableRoles), getNotes)
+  .get(validateProjectPermission(AvailableRoles), getNotesById)
   .put(
     validateProjectPermission([UserRolesEnum.ADMIN]),
     createNoteValidator(),

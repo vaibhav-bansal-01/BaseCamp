@@ -1,5 +1,5 @@
 import { User } from "../models/user.models.js";
-import { Projectmember } from "../models/projectmember.models.js";
+import { ProjectMember } from "../models/projectmember.models.js";
 import { ApiError } from "../utils/api-error.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import jwt from "jsonwebtoken";
@@ -41,7 +41,7 @@ export const validateProjectPermission = (roles = []) => {
       throw new ApiError(400, "Project id is missing");
     }
 
-    const project = await Projectmember.findOne({
+    const project = await ProjectMember.findOne({
       project: new mongoose.Types.ObjectId(projectId),
       user: new mongoose.Types.ObjectId(req.user._id),
     });

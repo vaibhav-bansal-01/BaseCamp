@@ -25,12 +25,12 @@ router.use(verifyJWT);
 
 router  
     .route("/:projectId")
-    .get(validateProjectPermission(AvailableRoles), getTaskById)
+    .get(validateProjectPermission(AvailableRoles), getTasks)
     .post(validateProjectPermission([UserRolesEnum.ADMIN, UserRolesEnum.PROJECT_ADMIN]), createTaskValidator(), createTask)
 
 router
     .route("/:projectId/t/:taskId")
-    .get(validateProjectPermission(AvailableRoles), getTasks)
+    .get(validateProjectPermission(AvailableRoles), getTaskById)
     .put(validateProjectPermission([UserRolesEnum.ADMIN, UserRolesEnum.PROJECT_ADMIN]), createTaskValidator(), updateTask)
     .delete(validateProjectPermission([UserRolesEnum.ADMIN, UserRolesEnum.PROJECT_ADMIN]), deleteTask)
 
@@ -39,7 +39,7 @@ router
     .post(validateProjectPermission([UserRolesEnum.ADMIN, UserRolesEnum.PROJECT_ADMIN]), createSubtaskValidator(), createSubTask)
 
 router
-    .route("/:projectId/st/:subTaskId")
+    .route("/:projectId/st/:subtaskId")
     .put(validateProjectPermission([UserRolesEnum.ADMIN, UserRolesEnum.PROJECT_ADMIN]), createSubtaskValidator(), updateSubTask)
     .delete(validateProjectPermission([UserRolesEnum.ADMIN, UserRolesEnum.PROJECT_ADMIN]), deleteSubTask)
 
